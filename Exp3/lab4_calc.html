@@ -1,0 +1,164 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        /* Body styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: powderblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        /* Calculator container */
+        .calculator {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 280px;
+        }
+        /* Display screen styling */
+        input[type="text"] {
+            width: 100%;
+            height: 60px;
+            font-size: 30px;
+            text-align: right;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        /* Button container for rows */
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        /* Styling for each button */
+        button {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            background-color: #f7a440;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        /* Hover and active button effects */
+        button:hover {
+            background-color: #ff7e5f;
+            transform: scale(1.1);
+        }
+        button:active {
+            background-color: #ff4d2e;
+        }
+        /* Special button styles for clear and equals */
+        button#clear {
+            background-color: #ff4d2e;
+        }
+        button#equal {
+            background-color: #4caf50;
+        }
+        button#clear:hover {
+            background-color: #ff1a00;
+        }
+        button#equal:hover {
+            background-color: #45a049;
+        }
+        button#clear:active {
+            background-color: #cc0000;
+        }
+        button#equal:active {
+            background-color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+<div class="calculator">
+    <input type="text" id="display" disabled />
+    <div class="row">
+        <button onclick="appendNumber('7')">7</button>
+        <button onclick="appendNumber('8')">8</button>
+        <button onclick="appendNumber('9')">9</button>
+        <button onclick="setOperator('/')">/</button>
+    </div>
+    <div class="row">
+        <button onclick="appendNumber('4')">4</button>
+        <button onclick="appendNumber('5')">5</button>
+        <button onclick="appendNumber('6')">6</button>
+        <button onclick="setOperator('*')">*</button>
+    </div>
+    <div class="row">
+        <button onclick="appendNumber('1')">1</button>
+        <button onclick="appendNumber('2')">2</button>
+        <button onclick="appendNumber('3')">3</button>
+        <button onclick="setOperator('-')">-</button>
+    </div>
+    <div class="row">
+        <button onclick="appendNumber('0')">0</button>
+        <button id="clear" onclick="clearDisplay()">C</button>
+        <button id="equal" onclick="calculateResult()">=</button>
+        <button onclick="setOperator('+')">+</button>
+    </div>
+</div>
+<script>
+    let currentInput = "";
+    let operator = "";
+    let firstOperand = null;
+    function appendNumber(number) {
+        currentInput += number;
+        document.getElementById('display').value = currentInput;
+    }
+    function setOperator(op) {
+        if (firstOperand === null) {
+            firstOperand = parseFloat(currentInput);
+            operator = op;
+            currentInput = "";
+        } else {
+            calculateResult();
+            operator = op;
+        }
+    }
+    function clearDisplay() {
+        currentInput = "";
+        firstOperand = null;
+        operator = "";
+        document.getElementById('display').value = "";
+    }
+    function calculateResult() {
+        if (firstOperand !== null && operator !== "" && currentInput !== "") {
+            const secondOperand = parseFloat(currentInput);
+            let result;
+            switch (operator) {
+                case '+':
+                    result = firstOperand + secondOperand;
+                    break;
+                case '-':
+                    result = firstOperand - secondOperand;
+                    break;
+                case '*':
+                    result = firstOperand * secondOperand;
+                    break;
+                case '/':
+                    result = firstOperand / secondOperand;
+                    break;
+                default:
+                    return;
+            }
+            document.getElementById('display').value = result;
+            currentInput = result.toString();
+            firstOperand = null;
+            operator = "";
+        }
+    }
+</script>
+</body>
+</html>

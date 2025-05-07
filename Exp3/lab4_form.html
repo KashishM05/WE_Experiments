@@ -1,0 +1,192 @@
+<html>
+<head>
+    <title>Sign Up Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        h2 {
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        input.error {
+            border-color: red;
+        }
+        input.valid {
+            border-color: green;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #1e6dff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+        .success-message {
+            display: none;
+            color: green;
+            font-size: 16px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h2>Sign Up</h2>
+    <form id="contactForm" onsubmit="return validateForm()">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <div class="error" id="usernameError"></div>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <div class="error" id="emailError"></div>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <div class="error" id="passError"></div>
+        </div>
+        <div>
+            <label for="password">Confirm Password:</label>
+            <input type="password" id="confirm" name="confirm" required>
+            <div class="error" id="confirmError"></div>
+        </div>
+        <button type="submit">SIGN UP</button>
+    </form>
+    <div class="success-message" id="successMessage">You have signed up successfully!</div>
+</div>
+<script>
+    document.getElementById("contactForm").addEventListener("submit", function(event)
+    {
+        event.preventDefault();
+        if (validateForm())
+        {
+            document.getElementById("successMessage").style.display = "block";
+            document.getElementById("contactForm").reset();
+            setTimeout(()=>{document.getElementById("successMessage").style.display = "none";},5000);
+        }
+    });
+    function validateForm()
+    {
+        let valid=true;
+
+        document.getElementById("usernameError").textContent = "";
+        document.getElementById("emailError").textContent = "";
+        document.getElementById("passError").textContent = "";
+        document.getElementById("confirmError").textContent = "";
+        document.getElementById("username").classList.remove("error", "valid");
+        document.getElementById("email").classList.remove("error", "valid");
+        document.getElementById("password").classList.remove("error", "valid");
+        document.getElementById("confirm").classList.remove("error", "valid");
+
+        // Get form input values
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const confirm = document.getElementById("confirm").value.trim();
+
+        // Username validation
+        if (username==="" || username.length<3 || username.length>25)
+        {
+            document.getElementById("usernameError").textContent = "Username must be between 3 and 25 characters.";
+            document.getElementById("username").classList.add("error");
+            valid = false;
+        }
+        else
+        {
+            document.getElementById("username").classList.add("valid");
+        }
+
+        // Email validation
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (email === "" || !emailPattern.test(email))
+        {
+            document.getElementById("emailError").textContent = "Please enter a valid email address!";
+            document.getElementById("email").classList.add("error");
+            valid = false;
+        }
+        else
+        {
+            document.getElementById("email").classList.add("valid");
+        }
+
+        // Password validation function
+        function validatePass(password)
+        {
+            const minLength = 8;
+            let hasmin8 = password.length >= minLength;
+            let hasLowercase = /[a-z]/.test(password);
+            let hasUppercase = /[A-Z]/.test(password);
+            let hasNumber = /\d/.test(password);
+            let hasSpecialChar = /[!@#$%^&*]/.test(password);
+
+            if (!hasmin8 || !hasLowercase || !hasUppercase || !hasNumber || !hasSpecialChar) {
+                return "Password must have at least 8 characters that include at least 1 lowercase, 1 uppercase, 1 number, and 1 special character (!@#$%^&*)";
+            }
+            return "valid";
+        }
+
+        // Validate password
+        const validationMessage = validatePass(password);
+        if (validationMessage !== "valid")
+        {
+            document.getElementById("passError").textContent = validationMessage;
+            document.getElementById("password").classList.add("error");
+            valid = false;
+        }
+        else
+        {
+            document.getElementById("password").classList.add("valid");
+        }
+
+        // Confirm password validation
+        if (confirm !== password)
+        {
+            document.getElementById("confirmError").textContent = "Please enter the password again";
+            document.getElementById("confirm").classList.add("error");
+            valid = false;
+        }
+        else
+        {
+            document.getElementById("confirm").classList.add("valid");
+        }
+        return valid;
+    }
+</script>
+</body>
+</html>
